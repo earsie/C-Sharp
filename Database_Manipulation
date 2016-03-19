@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+/// <summary>
+/// This model is what will be run when a button is clicked to either add, remove, or update
+/// the database.  I'm integrating this model into my Brook's carshop page. 
+/// </summary>
+public class ProductModel
+{
+    //This is where we insert an item as product object into the garagedBEntities db object
+    public string InsertProduct(Product product)
+    {
+        try
+        {
+            garageDBEntities db = new garageDBEntities();
+            db.Products.Add(product);
+            db.SaveChanges();
+            return product.Name + "was successfully inserted.";
+        }
+        catch (Exception e)
+        {
+            return "Error" + e;
+        }
+    }
+
+    //This is where we update/correct an item as product object into the garagedBEntities db 
+    //object
+    public string UpdateProduct(int id, Product product)
+    {
+        try
+        {
+            garageDBEntities db = new garageDBEntities();
+
+            //Fetch object from db
+            Product p = db.Products.Find(id);
+
+            p.Name = product.Name;
+            p.Price = product.Price;
+            p.TypeId = product.TypeId;
+            p.Description = product.Description;
+            p.Image = product.Image;
+
+            db.SaveChanges();
+
+            return product.Name + "was successfully updated";
+        }
+        catch (Exception e)
+        {
+            return "Error" + e;
+        }
+
+    }
+
+    //This is where we delete an item as product object into the garagedBEntities db object
+    public string DeleteProduct(int id)
+    {
+        try
+        {
+            garageDBEntities db = new garageDBEntities();
+            Product product = db.Products.Find(id);
+
+            db.Products.Attach(product);
+            db.Products.Remove(product);
+            db.SaveChanges();
+
+            return product.Name + "was successfully deleted.";
+        }
+        catch (Exception e)
+        {
+            return "Error" + e;
+        }
+    }
+
+}
